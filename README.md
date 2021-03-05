@@ -147,7 +147,7 @@ plt.show()
 ![png](output_19_1.png)
 
 
-Increasing the sample size has an impact! Apparently..
+Increasing the sample size has an impact! Apparently the algorithm fails at roughly half the `err` once we double `samples`.
 Next, we try with modulo `m = 997` and double the sample on each test to see if the behavior continues.
 
 
@@ -217,7 +217,7 @@ plt.show()
 ![png](output_23_0.png)
 
 
-No experiment presented any error, our prediction worked well. Next, we use the same values from the last experiment 
+No experiment presented any error, our prediction worked well. Next, we use the same values from the last experiment but increase `err` passed the threshold ![err \leq \frac{m}{2 \times sample}](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+err+%5Cleq+%5Cfrac%7Bm%7D%7B2+%5Ctimes+sample%7D)
 
 
 ```python
