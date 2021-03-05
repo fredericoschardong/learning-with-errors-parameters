@@ -40,7 +40,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 def run(n = 20, m = 97, err = 4, sample = 5, times = 10000):
-    if sample > n: # or m > n:
+    if sample > n:
         return None
 
     s = np.reshape(np.repeat(n, times), (times, 1))
@@ -70,7 +70,7 @@ Having detailed the mathematical background and how our implementation of LWE wo
 
 
 ```python
-r = list(range(1000))
+r = list(range(1, 1000))
 plt.plot(r, [run(n = i) for i in r], 'r+')
 plt.show()
 ```
@@ -132,8 +132,6 @@ Same behavior. Now let's change the sampling size.
 
 
 ```python
-r = list(range(1, 100))
-
 plt.plot(r, [run(sample=10, err = i) for i in r], 'r+')
 plt.show()
 
