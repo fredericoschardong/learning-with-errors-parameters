@@ -253,7 +253,7 @@ for index, prime in enumerate(list_of_primes_to_100K):
 plt.show()
 
 #restore the list error_upper_bound to its previus state
-for index, prime in enumerate(list_of_primes_to_1M):
+for index, prime in enumerate(list_of_primes_to_100K):
     error_upper_bound[index] = error_upper_bound[index][0]
 ```
 
