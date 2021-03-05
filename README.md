@@ -2,7 +2,7 @@
 
 In this report, I will briefly explain the Learning with Errors (LWE) method, which is a post-quantum public-key cryptography algorithm. We provide the mathematical background then detail our implementation based on Python 3 and `numpy`, and finally, our experiments, whose objective is to understand how changing the parameters of the algorithm affects the expected result. Our experiments are based on the encryption and decryption of a single bit message of value `1`, which are executed ten thousand times for each configuration tested. Graphs are created to visualize the results.
 
-**Try live [here](https://mybinder.org/v2/gh/fredericoschardong/learning-with-errors-parameters/HEAD?filepath=Index.ipynb)**
+**Try live [here](https://mybinder.org/v2/gh/fredericoschardong/learning-with-errors-parameters/HEAD?filepath=Index.ipynb) or [here](https://colab.research.google.com/github/fredericoschardong/learning-with-errors-parameters/blob/main/Index.ipynb)**
 
 # LWE Description
 
