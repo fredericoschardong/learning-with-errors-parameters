@@ -4,7 +4,7 @@ In this notebook I will briefly explain the Learning with Errors (LWE) method, w
 
 **Try live [here](https://mybinder.org/v2/gh/fredericoschardong/learning-with-errors-parameters/HEAD?filepath=Index.ipynb)**
 
-## LWE Decription
+## LWE Description
 
 LWE is a post-quantum publick-key algorithm, see [this presentation](https://summerschool-croatia.cs.ru.nl/2018/slides/Introduction%20to%20post-quantum%20cryptography%20and%20learning%20with%20errors.pdf) for more information and [the original paper](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.205.2622&rep=rep1&type=pdf). This method can be resumed to the computations described in this section. First, to create a public and private key:
 
