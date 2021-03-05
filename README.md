@@ -1,43 +1,38 @@
 # Understanding the parameters of Learning With Errors (LWE)
 
-In this report we will briefly explain the Learning with Errors (LWE) method, which is a post-quantum public-key cryptography algorithm. We provide the mathematical background then detail our implementation based on Python 3 and `numpy`, and finally our experiments, whose objective is to understand how changing the parameters of the algorithm affects the expected result. Our experiments are based on the encryption and decryption of a single bit message of value `1`, which are executed ten thousand times for each configuration tested. Graphs are created to visualise the results.
+In this notebook I will briefly explain the Learning with Errors (LWE) method, which is a post-quantum public-key cryptography algorithm. We provide the mathematical background then detail our implementation based on Python 3 and `numpy`, and finally our experiments, whose objective is to understand how changing the parameters of the algorithm affects the expected result. Our experiments are based on the encryption and decryption of a single bit message of value `1`, which are executed ten thousand times for each configuration tested. Graphs are created to visualise the results.
+
+**Try live [here](https://mybinder.org/v2/gh/fredericoschardong/learning-with-errors-parameters/HEAD?filepath=Index.ipynb)**
 
 ## LWE Decription
 
 LWE is a post-quantum publick-key algorithm, see [this presentation](https://summerschool-croatia.cs.ru.nl/2018/slides/Introduction%20to%20post-quantum%20cryptography%20and%20learning%20with%20errors.pdf) for more information and [the original paper](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.205.2622&rep=rep1&type=pdf). This method can be resumed to the computations described in this section. First, to create a public and private key:
 
-$$
-A_{m}^{n \times 1} \times S_{m}^{1 \times 1} + E_{m}^{n \times 1} = B_{m}^{n \times 1}
-$$
+![A_{m}^{n \times 1} \times S_{m}^{1 \times 1} + E_{m}^{n \times 1} = B_{m}^{n \times 1}](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+A_%7Bm%7D%5E%7Bn+%5Ctimes+1%7D+%5Ctimes+S_%7Bm%7D%5E%7B1+%5Ctimes+1%7D+%2B+E_%7Bm%7D%5E%7Bn+%5Ctimes+1%7D+%3D+B_%7Bm%7D%5E%7Bn+%5Ctimes+1%7D)
 
-$A$ and $B$ are the public key, $S$ is the private key and $E$ is the random error, and $A,B,S,E \in \mathbb{Z}$. The matrixes $A,B,E$ have dimension $n \times 1$, that is, they are single column, because in this report we implement a single-bit encryption and decryption.
+![A](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+A) and ![B](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+B) are the public key, ![S](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+S) is the private key and ![E](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+E) is the random error, and ![A,B,S,E \in \mathbb{Z}](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+A%2CB%2CS%2CE+%5Cin+%5Cmathbb%7BZ%7D). The matrixes ![A,B,E](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+A%2CB%2CE) have dimension ![n \times 1](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+n+%5Ctimes+1), that is, they are single column, because in this report we implement a single-bit encryption and decryption.
 
-To encrypt a single-bit message $x$ using the public key $A,B$ we obtain the encrypted message composed of $(u,v)$ with:
+To encrypt a single-bit message ![x](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+x) using the public key ![A,B](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+A%2CB) we obtain the encrypted message composed of ![(u,v)](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%28u%2Cv%29) with:
 
-$$
-u = \left(\sum A_{samples}\right) \bmod m \\
-v = \left(\sum B_{samples}\right) + \frac{q}{2}x \bmod m
-$$
+![u = \left(\sum A_{samples}\right) \bmod m \\ v = \left(\sum B_{samples}\right) + \frac{q}{2}x \bmod m](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+u+%3D+%5Cleft%28%5Csum+A_%7Bsamples%7D%5Cright%29+%5Cbmod+m+%5C%5C+v+%3D+%5Cleft%28%5Csum+B_%7Bsamples%7D%5Cright%29+%2B+%5Cfrac%7Bq%7D%7B2%7Dx+%5Cbmod+m)
 
-Where $samples$ are randomly chosen samples from $A$ and $B$. Finally, to decrypt the message $(u,v)$ and find the value of bit message $x$:
+Where ![samples](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+samples) are randomly chosen samples from ![A](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+A) and ![B](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+B). Finally, to decrypt the message ![(u,v)](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%28u%2Cv%29) and find the value of bit message ![x](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+x):
 
-$$
-x' = 
+![x' = 
 \begin{cases}
 0 \text{, if } (v - su \bmod m) < \frac{q}{2} \\
 1 \text{, else}
-\end{cases}
-$$
+\end{cases}](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+x%27+%3D+%0A%5Cbegin%7Bcases%7D%0A0+%5Ctext%7B%2C+if+%7D+%28v+-+su+%5Cbmod+m%29+%3C+%5Cfrac%7Bq%7D%7B2%7D+%5C%5C%0A1+%5Ctext%7B%2C+else%7D%0A%5Cend%7Bcases%7D)
 
 ## LWE Implementation
 
 The following `run` function was based on [this material](https://medium.com/asecuritysite-when-bob-met-alice/learning-with-errors-and-ring-learning-with-errors-23516a502406), where LWE is implemented to encrypt and decrypt a single bit of value `1`. All parameters required by the algorithm are passed as parameters for this function. They are:
-+ `n` and `m`, where $n$ is the number of rows of the single column matrixes $A,B,E$, and $m$ is the modulo for all the operations
-+ `err` sets the largest value of the interval $[1,err] \in \mathbb{Z}$, from which error values are randomly drawn and then added to the result of $A_{m}^{n \times 1} * S_{m}^{1 \times 1}$, as described above
-+ `sample` sets the number of samples drawn from the public key $(A,B)$ to encrypt the bit-message `1`
++ `n` and `m`, where `n` is the number of rows of the single column matrixes ![A,B,E](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+A%2CB%2CE), and `m` is the modulo for all the operations
++ `err` sets the largest value of the interval ![[1,err] \in \mathbb{Z}](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5B1%2Cerr%5D+%5Cin+%5Cmathbb%7BZ%7D), from which error values are randomly drawn and then added to the result of ![A_{m}^{n \times 1} * S_{m}^{1 \times 1}](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+A_%7Bm%7D%5E%7Bn+%5Ctimes+1%7D+%2A+S_%7Bm%7D%5E%7B1+%5Ctimes+1%7D), as described above
++ `sample` sets the number of samples drawn from the public key ![(A,B)](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%28A%2CB%29) to encrypt the bit-message `1`
 + `times` sets how many times the experiment is reproduced to find a statistically relevant result
 
-The returned value is in the range $[0,1] \in \mathbb{R}$ and represents how many experiments ran successfully, that is, correctly encrypted and decrypted the bit `1`.
+The returned value is in the range ![[0,1] \in \mathbb{R}](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5B0%2C1%5D+%5Cin+%5Cmathbb%7BR%7D) and represents how many experiments ran successfully, that is, correctly encrypted and decrypted the bit `1`.
 
 
 ```python
@@ -176,9 +171,9 @@ plt.show()
 ![png](output_21_1.png)
 
 
-Empircally testing LWE the parameters seem to have to respect the ratio of $err \leq \frac{m}{2 \times sample}$ to correctly encrypt and decrypt. 
+Empircally testing LWE the parameters seem to have to respect the ratio of ![err \leq \frac{m}{2 \times sample}](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+err+%5Cleq+%5Cfrac%7Bm%7D%7B2+%5Ctimes+sample%7D) to correctly encrypt and decrypt. 
 
-Let's put this claim to the test. First we calculate all the prime numbers in the range $[101,100000]$ and select 1 for every 100 primes in the list. Then, for all these primes we select the number of samples at random (limiting at 1% of each prime) and calculate the uper bound value for the error range following the formula $\frac{m}{2 \times sample}$. Next, we run the LWE algorithm with the aforementioned parameters and plot the result. If our empirically found relation holds, then we shall see no point off the `1.0` value in the y axis.
+Let's put this claim to the test. First we calculate all the prime numbers in the range ![[101,100000]](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5B101%2C100000%5D) and select 1 for every 100 primes in the list. Then, for all these primes we select the number of samples at random (limiting at 1% of each prime) and calculate the uper bound value for the error range following the formula ![\frac{m}{2 \times sample}](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+%5Cfrac%7Bm%7D%7B2+%5Ctimes+sample%7D). Next, we run the LWE algorithm with the aforementioned parameters and plot the result. If our empirically found relation holds, then we shall see no point off the `1.0` value in the y axis.
 
 
 ```python
@@ -268,4 +263,4 @@ for index, prime in enumerate(list_of_primes_to_1M):
 ![png](output_25_0.png)
 
 
-The relation we found empirically doesn't seem to hold for larger $m$ values. There are probably more complex relations at play in LWE, our equation $err \leq \frac{m}{2 \times sample}$ is a good start, though.
+The relation we found empirically doesn't seem to hold for larger `m` values. There are probably more complex relations at play in LWE, our equation ![err \leq \frac{m}{2 \times sample}](https://render.githubusercontent.com/render/math?math=%5Cdisplaystyle+err+%5Cleq+%5Cfrac%7Bm%7D%7B2+%5Ctimes+sample%7D) is a good start, though.
